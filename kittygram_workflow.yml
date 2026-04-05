@@ -161,14 +161,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Copy docker-compose.production.yaml via ssh
+    - name: Copy docker-compose.production.yml via ssh
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
-        source: "docker-compose.production.yaml"
+        source: "docker-compose.production.yml"
         target: "/opt/kittygram/"
         
     - name: Setup containers and up
@@ -180,12 +180,12 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
           cd /opt/kittygram
-          sudo docker compose -f docker-compose.production.yaml pull
-          sudo docker compose -f docker-compose.production.yaml down
-          sudo docker compose -f docker-compose.production.yaml up -d --force-recreate
+          sudo docker compose -f docker-compose.production.yml pull
+          sudo docker compose -f docker-compose.production.yml down
+          sudo docker compose -f docker-compose.production.yml up -d --force-recreate
           sleep 10
-          sudo docker compose -f docker-compose.production.yaml exec frontend /app/deploy_static.sh
-          sudo docker compose -f docker-compose.production.yaml exec backend /app/deploy_static.sh
+          sudo docker compose -f docker-compose.production.yml exec frontend /app/deploy_static.sh
+          sudo docker compose -f docker-compose.production.yml exec backend /app/deploy_static.sh
   
   send_message:
     runs-on: ubuntu-latest
