@@ -1,10 +1,10 @@
 version: '3'
 
-# Перечень volume:
 volumes:
+  static:
+  media:
   pg_data:
 
-# Перечень контейнеров:
 services:
 
   postgres:
@@ -12,21 +12,45 @@ services:
     env_file: .env
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks:
+      - kittygram_network
 
   backend:
-    build: ./backend/
+    container_name: kittygram_backend
+    image: shepherdblaine/kittygram_backend:latest
     env_file: .env
+    volumes:
+      - static:/mnt/static
+      - media:/mnt/media
     depends_on:
       - postgres
+    networks:
+      - kittygram_network
 
   frontend:
+    container_name: kittygram_frontend
+    image: shepherdblaine/kittygram_frontend:latest 
     env_file: .env
-    build: ./frontend/
+    volumes:
+      - static:/mnt/static/
     depends_on:
       - backend
+    networks:
+      - kittygram_network
       
   gateway:
-    env_file: .env
-    build: ./nginx/
+    container_name: kittygram_gateway
+    image: shepherdblaine/kittygram_gateway:latest 
+    ports:
+      - "80:80"
+    volumes:
+      - static:/mnt/static
+      - media:/mnt/media
     depends_on:
       - frontend
+    networks:
+      - kittygram_network
+
+networks:
+  kittygram_network:
+    driver: bridge
