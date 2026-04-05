@@ -1,3 +1,8 @@
 POSTGRES_DB=kittygram
-POSTGRES_USER=kittygram_user
-POSTGRES_PASSWORD=kittygram_password
+POSTGRES_USER=kittygram
+POSTGRES_PASSWORD=Ex@mpl3Pazzv0rt
+DB_HOST=postgresql.domain.tld
+DB_PORT=5432
+SECRET_KEY=MDegiohg4ihg8ugSJhj776
+DEBUG=True
+ALLOWED_HOSTS=localhost,172.22.11.234
