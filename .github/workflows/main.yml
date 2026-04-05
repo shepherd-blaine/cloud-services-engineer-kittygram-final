@@ -1,4 +1,4 @@
-name: CI/CD для Kittygram workflow
+name: CI/CD для Kittygram
 
 on:
   push:
