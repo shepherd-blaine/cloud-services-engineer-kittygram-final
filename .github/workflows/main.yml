@@ -199,11 +199,11 @@ jobs:
         python-version: 3.9
     - name: Install test dependencies
       run: |
-        pip install pytest
+        python -m pip install --upgrade pip
+        pip install -r ./backend/requirements.txt
     - name: Run auto tests
       run: |
-        cd tests
-        python -m pytest -v
+        pytest tests/
           
   send_message:
     runs-on: ubuntu-latest
