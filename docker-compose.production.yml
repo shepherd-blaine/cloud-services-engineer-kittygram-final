@@ -1,0 +1,32 @@
+version: '3'
+
+# Перечень volume:
+volumes:
+  pg_data:
+
+# Перечень контейнеров:
+services:
+
+  postgres:
+    image: postgres:13.10
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend/
+    env_file: .env
+    depends_on:
+      - postgres
+
+  frontend:
+    env_file: .env
+    build: ./frontend/
+    depends_on:
+      - backend
+      
+  gateway:
+    env_file: .env
+    build: ./nginx/
+    depends_on:
+      - frontend

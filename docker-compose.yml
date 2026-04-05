@@ -1,0 +1,60 @@
+version: '3'
+
+volumes:
+  static:
+  media:
+  pg_data:
+
+services:
+
+  postgres:
+    image: postgres:13.10
+    env_file: .env
+    ports:
+      - "15432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - kittygram_network
+
+  backend:
+    container_name: kittygram_backend
+    build: ./backend/
+    env_file: .env
+    volumes:
+      - static:/mnt/static
+      - media:/mnt/media
+    depends_on:
+      - postgres
+    networks:
+      - kittygram_network
+
+  frontend:
+    container_name: kittygram_frontend
+    build: ./frontend/
+    env_file: .env
+    ports:
+      - "8082:8000"
+    volumes:
+      - static:/app
+    depends_on:
+      - backend
+    networks:
+      - kittygram_network
+      
+  gateway:
+    container_name: kittygram_gateway
+    build: ./nginx/
+    ports:
+      - "8085:80"
+    volumes:
+      - static:/mnt/static
+      - media:/mnt/media
+    depends_on:
+      - frontend
+    networks:
+      - kittygram_network
+
+networks:
+  kittygram_network:
+    driver: bridge
